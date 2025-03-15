@@ -1,0 +1,41 @@
+/* Lainchan-inspired dark theme */
+body {
+    background-color: #111;
+    color: #ddd;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+a {
+    color: #6df;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    background-color: #222;
+    padding: 20px;
+}
+
+nav a {
+    margin: 0 15px;
+    color: #9cf;
+}
+
+main {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+}
+
+footer {
+    background-color: #222;
+    padding: 10px;
+    font-size: 0.8em;
+    color: #666;
+}
