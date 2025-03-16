@@ -28,6 +28,10 @@ jobs:
       - name: Run Python Script to Generate Blog
         run: python ./generate_index.py
 
+      - name: Debug - List public dir
+        run: ls -R public
+
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
