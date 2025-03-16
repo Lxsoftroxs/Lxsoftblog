@@ -1,41 +1,112 @@
-/* Lainchan-inspired dark theme */
+/* Lainchan-Inspired Dark Theme */
 body {
     background-color: #111;
     color: #ddd;
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
+/* Links */
 a {
     color: #6df;
     text-decoration: none;
 }
-
 a:hover {
     text-decoration: underline;
 }
 
+/* Header */
 header {
     background-color: #222;
     padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 3px solid #6df;
 }
 
+/* Navigation */
+nav {
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+}
 nav a {
     margin: 0 15px;
     color: #9cf;
+    font-size: 18px;
+}
+nav a:hover {
+    color: #6df;
 }
 
+/* Main Content */
 main {
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 700px;
     padding: 20px;
     background-color: #1a1a1a;
     border-radius: 8px;
+    box-shadow: 0px 0px 10px #000;
 }
 
+/* Footer */
 footer {
     background-color: #222;
     padding: 10px;
     font-size: 0.8em;
     color: #666;
+    border-top: 3px solid #6df;
+}
+
+/* Blog Post Styling */
+.post-title {
+    font-size: 24px;
+    color: #6df;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    text-align: left;
+    padding: 20px;
+}
+
+/* Code Blocks */
+pre {
+    background-color: #333;
+    padding: 10px;
+    overflow: auto;
+    border-radius: 5px;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    color: #9cf;
+}
+
+/* Quotes */
+blockquote {
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #222;
+    border-left: 5px solid #6df;
+    color: #aaa;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    main {
+        padding: 10px;
+    }
+    nav a {
+        display: block;
+        margin: 5px 0;
+    }
 }
