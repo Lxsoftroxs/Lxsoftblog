@@ -9,25 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
+      # 1) Build your site here (Hugo, Jekyll, or custom script).
+      #    For example, your Python script that outputs HTML to ./public:
+      - name: Build site
         run: |
-          pip install --upgrade pip
           pip install markdown
-
-      - name: Generate Blog
-        run: |
           python generate_index.py
-          # ^ This should create your final HTML in ./public
 
-      - name: Upload Pages Artifact
+      # 2) Upload your generated site (./public) as a Pages artifact:
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./public
