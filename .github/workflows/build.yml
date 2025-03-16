@@ -1,19 +1,16 @@
-name: Build and Deploy Blog
+name: Build and Deploy with GitHub Actions
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Debug - List files
-        run: ls -R
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -25,15 +22,22 @@ jobs:
           pip install --upgrade pip
           pip install markdown
 
-      - name: Run Python Script to Generate Blog
-        run: python ./generate_index.py
+      - name: Generate Blog
+        run: |
+          python generate_index.py
+          # ^ This should create your final HTML in ./public
 
-      - name: Debug - List public dir
-        run: ls -R public
-
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
