@@ -1,0 +1,55 @@
+name: Generate Blog
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Convert Markdown to HTML
+        run: |
+          mkdir -p public
+          for file in _posts/*.md; do
+            TITLE=$(grep -m 1 "title: " "$file" | sed 's/title: //')
+            DATE=$(grep -m 1 "date: " "$file" | sed 's/date: //')
+            BODY=$(awk 'NR>3' "$file")
+
+            FILENAME=$(basename "$file" .md)
+            echo "<html><head><title>$TITLE</title><link rel='stylesheet' href='../style.css'></head><body>
+                  <header><h1>$TITLE</h1></header>
+                  <p>Posted on $DATE</p>
+                  <main>$BODY</main>
+                  <footer>&copy; 2025 My Blog</footer>
+                  </body></html>" > public/$FILENAME.html
+          done
+
+      - name: Update Index.html
+        run: |
+          echo "<html><head><title>My Blog</title><link rel='stylesheet' href='style.css'></head><body>
+                <header>Welcome to the Wired</header>
+                <nav><a href='index.html'>Home</a></nav>
+                <main><h2>Recent Posts</h2>" > public/index.html
+
+          for file in public/*.html; do
+            [[ "$file" != "public/index.html" ]] && echo "<a href='$(basename $file)'>$(basename $file .html)</a><br>" >> public/index.html
+          done
+
+          echo "</main><footer>&copy; 2025 My Blog</footer></body></html>" >> public/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
