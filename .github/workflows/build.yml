@@ -22,17 +22,26 @@ jobs:
         run: |
           mkdir -p public
           for file in _posts/*.md; do
-            TITLE=$(grep -m 1 "title: " "$file" | sed 's/title: //')
-            DATE=$(grep -m 1 "date: " "$file" | sed 's/date: //')
+            # Ensure file exists
+            [ -f "$file" ] || continue
+
+            # Extract title and date
+            TITLE=$(grep -m 1 "^title: " "$file" | sed 's/title: //')
+            DATE=$(grep -m 1 "^date: " "$file" | sed 's/date: //')
+
+            # Extract body text after front matter
             BODY=$(awk 'NR>3' "$file")
 
-            FILENAME=$(basename "$file" .md)
-            echo "<html><head><title>$TITLE</title><link rel='stylesheet' href='../style.css'></head><body>
+            # Generate HTML filename
+            FILENAME=$(basename "$file" .md).html
+
+            # Create the HTML file
+            echo "<html><head><title>$TITLE</title><link rel='stylesheet' href='style.css'></head><body>
                   <header><h1>$TITLE</h1></header>
                   <p>Posted on $DATE</p>
-                  <main>$BODY</main>
+                  <main><p>$BODY</p></main>
                   <footer>&copy; 2025 My Blog</footer>
-                  </body></html>" > public/$FILENAME.html
+                  </body></html>" > public/$FILENAME
           done
 
       - name: Update Index.html
@@ -43,7 +52,11 @@ jobs:
                 <main><h2>Recent Posts</h2>" > public/index.html
 
           for file in public/*.html; do
-            [[ "$file" != "public/index.html" ]] && echo "<a href='$(basename $file)'>$(basename $file .html)</a><br>" >> public/index.html
+            FILENAME=$(basename "$file")
+            if [[ "$FILENAME" != "index.html" ]]; then
+              POST_TITLE=$(grep -m 1 "<h1>" "$file" | sed 's/<[^>]*>//g')
+              echo "<a href='$FILENAME'>$POST_TITLE</a><br>" >> public/index.html
+            fi
           done
 
           echo "</main><footer>&copy; 2025 My Blog</footer></body></html>" >> public/index.html
